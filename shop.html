@@ -1,0 +1,44 @@
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li><a href="#/">首页</a></li>
+        <li><a href="javascript:;" ng-click="px='title';reverse=!reverse">销量</a></li>
+        <li><a href="javascript:;" ng-click="px='id';reverse=!reverse">评论</a></li>
+        <li><a href="javascript:;" ng-click="px='price';reverse=!reverse">价格</a></li>
+        <li><a href="javascript:;" ng-click="px='src';reverse=!reverse">上架时间</a></li>
+      </ul>
+      <form class="navbar-form navbar-left" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="关键字" ng-model="order">
+        </div>
+        <button type="button" class="btn btn-default" id="con"> 搜索 </button>
+      </form>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="javascript:;" ng-click="px='price';reverse=!reverse">升序降序</a></li>
+        <li class="dropdown">
+          <a href="#/cart" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">购物车 <span class="caret"></span></a>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+<div class="row">
+    <div class="col-md-4" ng-repeat="x in shoplist | filter:order |orderBy:px:reverse">
+        <div class="thumbnail">
+            <img alt="300x200" ng-src="{{x.src}}"/>
+            <div class="caption">
+                <h3>
+                   {{x.price | currency:'￥'}}
+                </h3>
+                <p>
+                    {{x.title}} 
+                </p>
+                <p>
+                 	 <a class="btn btn-danger" href="javascript:;" ng-click="click($index,$event)" class="btn btn-lg btn-danger" data-toggle="popover" title="Popover title" data-content="添加成功">加入购物车</a> <a class="btn btn-default" href="javascript:;">收藏</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

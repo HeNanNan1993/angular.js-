@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <!-- 新 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+    <script src="js/jquery-1.11.3.min.js"></script>
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/angular.min.js"></script>
+    <script src="js/angular-route.js"></script>
+    <script src="js/jquery.fly.min.js"></script>
+    <style>
+    .fly>img{
+        width: 80px;
+        height: 80px;
+        border-radius: 40px;
+    }
+    </style>
+</head>
+<body ng-app="app" ng-controller="shop">
+    <div class="container">
+    <div class="row">
+        <div class="col-md-12 column">
+            <div class="page-header">
+                <h1 class="text-center">
+                  BVLGARI
+                </h1>
+                <div class="row">
+                    <div class="col-md-12 column">
+                        <ul class="nav nav-pills nav-justified">
+                          <li role="presentation"><a href="#">金装</a></li>
+                          <li role="presentation"><a href="#">银饰</a></li>
+                          <li role="presentation"><a href="#">高级珠宝</a></li>
+                          <li role="presentation"><a href="#">BRIDIL系列</a></li>
+                          <li role="presentation"><a href="#">腕表</a></li>
+                          <li role="presentation"><a href="#">皮具</a></li>
+                          <li role="presentation"><a href="#">香水</a></li>
+                          <li role="presentation"><a href="#">礼物</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel slide" id="carousel-403945">
+                <ol class="carousel-indicators">
+                    <li class="active" data-slide-to="0" data-target="#carousel-403945">
+                    </li>
+                    <li data-slide-to="1" data-target="#carousel-403945">
+                    </li>
+                    <li data-slide-to="2" data-target="#carousel-403945">
+                    </li>
+                    <li data-slide-to="3" data-target="#carousel-403945">
+                    </li>
+                </ol>
+
+                <div class="carousel-inner">
+                    <div class="item">
+                        <img alt="" src="images/1.jpg" />
+                    </div>
+                    <div class="item active">
+                        <img alt="" src="images/2.png" />
+                    </div>
+                    <div class="item">
+                        <img alt="" src="images/3.jpg" />
+                    </div>
+                    <div class="item">
+                        <img alt="" src="images/4.jpg" />
+                    </div>
+                </div> 
+            </div>
+        </div>
+    </div>
+    <div class="row page-header">
+        <div class="col-md-12 column">
+            <ul class="nav nav-pills nav-justified">
+              <li role="presentation"><a href="#">金装</a></li>
+              <li role="presentation"><a href="#">银饰</a></li>
+              <li role="presentation"><a href="#">高级珠宝</a></li>
+              <li role="presentation"><a href="#">BRIDIL系列</a></li>
+              <li role="presentation"><a href="#">腕表</a></li>
+              <li role="presentation"><a href="#">皮具</a></li>
+              <li role="presentation"><a href="#">香水</a></li>
+              <li role="presentation"><a href="#">礼物</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="row clearfix" >
+        <div class="col-md-12 column">
+        
+            <div class="row clearfix">
+                <div class="col-md-3 column">
+                   <ul class="list-group">
+                        <li class="list-group-item text-center"><a href="#/">首页</a></li>
+                        <li class="list-group-item text-center"><a href="#/shop">商品列表</a></li>
+                        <li class="list-group-item text-center"><a href="#/like">我的收藏</a></li>
+                        <li class="list-group-item text-center"><a href="#/dingdan">我的订单</a></li>
+                        <li class="list-group-item text-center"><a href="#/cart">购物总商品 <span class="badge">{{total.snum}}</span>
+                        </a></li>
+                    </ul>
+                </div>
+                <a href="#/cart" class="btn btn-primary" style="position:fixed;top:300px;left:0;width:50px;height:115px;z-index:999;">
+                  购<br>物<br>数<br>量<br><span class="badge">{{total.sumNum}}</span>
+                </a>
+                <div class="col-md-9 column " ng-view >
+                 
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+
+    var app=angular.module('app',['ngRoute'],function($routeProvider){
+        $routeProvider
+            .when('/',{templateUrl:'index1.html'})
+            .when('/shop',{templateUrl:'shop.html'})
+            .when('/like',{template:'<h3>您还没有收藏的商品</h3><a href="#/shop">前往商品区</a>'})
+            .when('/cart',{templateUrl:'cart.html'})
+            .when('/jiesuan',{template:'<h3>订单成功<span class="glyphicon glyphicon-ok" style="color:green;"></span></h3><a href="#/">返回首页</a>'})
+            .when('/dingdan',{template:'<h3>尚未创建订单</h3><a href="#/shop">前往购买</a>'})
+    });
+
+    app.controller('shop',function($scope,$rootScope){
+
+
+        $scope.$watch('shopcart',function(){
+            $scope.getTotal();
+        },true);
+
+
+        $scope.getTotal=function(){
+            $scope.total={tprice:0,sum:0,snum:0,sumNum:0};
+            $scope.total.snum=$rootScope.shopcart.length
+            angular.forEach($rootScope.shopcart,function(value,key){
+            	 $scope.total.sumNum+=value.num;
+                if(value.done){
+                    $scope.total.sum+=value.num;
+                    $scope.total.tprice+=value.price*value.num;
+                }
+            })
+        }
+        $scope.jian=function(index){
+            if($rootScope.shopcart[index].num<=0){
+                $rootScope.shopcart[index].num=0;
+            }else{
+                $rootScope.shopcart[index].num--;
+            }
+        }
+        $scope.jia=function(index){
+            $rootScope.shopcart[index].num++;
+        }
+        $scope.del=function(index){
+           $rootScope.shopcart.splice(index,1);
+        }
+        $scope.click=function(index,e){
+            //点击购买
+            var a = 0;
+            var name = $rootScope.shoplist[index].id;
+            var src=$rootScope.shoplist[index].src;
+            console.log()
+              $('<div class="fly"><img src="'+src+'"></div>').fly({
+                start: {
+                    left: e.clientX, //开始位置（必填）#fly元素会被设置成position: fixed
+                    top: e.clientY, //开始位置（必填）
+                },
+                end: {
+                    left: -80, //结束位置（必填）
+                    top: 330, //结束位置（必填）
+                    // width: 100, //结束时高度
+                    // height: 100, //结束时高度
+                },
+                // autoPlay: false, //是否直接运动,默认true
+                speed: 1.1, //越大越快，默认1.2
+                vertex_Rtop: 100, //运动轨迹最高点top值，默认20
+                onEnd: function() {
+                        // setTimeout(function(){
+                        //     $('.fly').remove();
+                        // },5000)
+                        
+                    } //结束回调
+            });
+            
+            for (var i =0;i<$rootScope.shopcart.length;i++) {
+                if(name==$rootScope.shopcart[i].id){
+                    $rootScope.shopcart[i].num++;
+                    return;
+                }else{
+                    a++;
+                }
+            }
+
+             if(a==$rootScope.shopcart.length){
+                $rootScope.shoplist[index].num=1;
+                $rootScope.shopcart.push($rootScope.shoplist[index]);
+            }
+        }
+        $rootScope.shopcart=[];
+        $rootScope.shoplist=[
+            {id:1,title:'周大生 黄金吊坠',price:5288,num:1,done:false,src:'images/a.jpg'},
+            {id:2,title:'周大生 黄金耳环',price:5288,num:1,done:false,src:'images/b.jpg'},
+            {id:3,title:' 周大生 黄金手链 3.99g',price:6288,num:1,done:false,src:'images/c.jpg'},
+            {id:4,title:'周大生 princess系列-梅花烙',price:5288,num:1,done:false,src:'images/a.jpg'},
+            {id:5,title:'周大生 18K金钻石套链',price:7000,num:1,done:false,src:'images/b.jpg'},
+            {id:6,title:'周大生 钻石吊坠 18K金钻石',price:3288,num:1,done:false,src:'images/c.jpg'},
+           
+        ];
+
+    });
+
+    app.controller('test',function($scope,$rootScope){
+        $scope.checkAll=function(){
+            angular.forEach($scope.shopcart, function(value, key) {
+                value['done'] = $scope.che;
+            })
+        }
+        $scope.oClick=function(){
+            var a=1;
+            angular.forEach($rootScope.shopcart, function(value, key) {
+                a*=value.done;
+            })
+            if(a==1){
+                $scope.che=true;
+            }else{
+                $scope.che=false;
+            }
+         }
+
+
+
+        $scope.go=function(){
+            $scope.money=[]
+            angular.forEach($rootScope.shopcart, function(value, key) {
+                if(value.done){
+                    $scope.money.push($rootScope.shopcart[key])
+                }
+            })
+         }
+        $scope.empty=function(){
+           $rootScope.shopcart=[];
+        }
+        $scope.zhifu=function(){
+        	var oldlist=$rootScope.shopcart;
+            $rootScope.shopcart=[];
+        	 angular.forEach(oldlist, function(value, key) {
+                if(value.done==false){
+                    $rootScope.shopcart.push(oldlist[key]);
+                    $scope.check=false;
+                    $scope.che=false;
+                }
+           });
+        }
+ });
+        
+
+            
+      
+       
+</script>
+</body>
+</html>
